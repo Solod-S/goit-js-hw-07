@@ -8,8 +8,8 @@ const refs = {
   instance: "",
   createGalleryMarkUpFrom(galleryItems) {
     return galleryItems
-      .map(({ preview, original, description }) => {
-        return `<div class="gallery__item">
+      .map(
+        ({ preview, original, description }) => `<div class="gallery__item">
   <a class="gallery__link" href="large-image.jpg">
     <img
       class="gallery__image"
@@ -18,8 +18,8 @@ const refs = {
       alt="${description}"
     />
   </a>
-</div> `;
-      })
+</div> `
+      )
       .join("");
   },
   //функция динамической разметки (перебор входящего массива с объектами map-ом + на результат [] всего применим .join("") === строка с разметкой)
