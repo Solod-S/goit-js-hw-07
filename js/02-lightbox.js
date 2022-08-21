@@ -3,7 +3,7 @@ import { galleryItems } from "./gallery-items.js";
 
 console.log(galleryItems);
 
-const refs = {
+const SimpleLightboxGallery = {
   gallery: document.querySelector(".gallery"),
   createGalleryMarkUpFrom(galleryItems) {
     return galleryItems
@@ -18,9 +18,9 @@ const refs = {
   },
 };
 
-const newGallery = refs.createGalleryMarkUpFrom(galleryItems);
+const newGallery = SimpleLightboxGallery.createGalleryMarkUpFrom(galleryItems);
 // новая галлерея === запуск функции создания разметки
-refs.gallery.insertAdjacentHTML("beforeend", newGallery);
+SimpleLightboxGallery.gallery.insertAdjacentHTML("beforeend", newGallery);
 
 const lightbox = new SimpleLightbox(".gallery a", {
   captionType: "alt",

@@ -3,7 +3,7 @@ import { galleryItems } from "./gallery-items.js";
 
 // console.log(galleryItems);
 
-const refs = {
+const basicLightboxGallery = {
   gallery: document.querySelector(".gallery"),
   instance: "",
   createGalleryMarkUpFrom(galleryItems) {
@@ -34,34 +34,57 @@ const refs = {
     }
     // мы не слушаем событие, если nodeName выбранного таргета не IMG
 
-    refs.openOriginalImg(event.target.dataset.source);
+    basicLightboxGallery.openOriginalImg(event.target.dataset.source);
     //запускаем функцию и передаем туда атрибут === ссылку на дата атрибут data-source
   },
   openOriginalImg(source) {
     // как открыли окно
-    const instance = basicLightbox.create(`
+
+    const instance = basicLightbox.create(
+      `
     <img src="${source}">
-`);
+`,
+      {
+        onShow: (instance) => {
+          document.addEventListener(
+            "keydown",
+            basicLightboxGallery.onKeyPresEsq
+          );
+          //запускаем слушателя события клацанья клавиатуры
+        },
+        onClose: () => {
+          document.removeEventListener(
+            "keydown",
+            basicLightboxGallery.onKeyPresEsq
+          );
+          //выключаем слушателя события клацанья клавиатуры
+        },
+      }
+    );
     instance.show();
-    refs.instance = instance;
+    this.instance = instance;
     //в ключ instance записываем ссылку на эту переменную
-    window.addEventListener("keydown", refs.onKeyPresEsq);
+    // window.addEventListener("keydown", this.onKeyPresEsq);
     //запускаем слушателя события клацанья клавиатуры
   },
-  // метод внешней библиотеки basiclightbox который создает нам всплывающее окно + запуск евент листнера + запись в ключ ссылку на переменную
+  // метод внешней библиотеки basiclightbox который создает нам всплывающее окно + запуск-выключает евент листнера + запись в ключ ссылку на переменную
   onKeyPresEsq(event) {
     console.log(event);
     if (event.code === "Escape") {
-      refs.instance.close();
+      basicLightboxGallery.instance.close();
       // если нажали Esc то закрываем окно
-      window.removeEventListener("keydown", refs.onKeyPresEsq);
+      window.removeEventListener("keydown", basicLightboxGallery.onKeyPresEsq);
       // снимаем слушателя событий
     }
   },
 };
 
-const newGallery = refs.createGalleryMarkUpFrom(galleryItems);
+const newGallery = basicLightboxGallery.createGalleryMarkUpFrom(galleryItems);
 // новая галлерея === запуск функции создания разметки
-refs.gallery.insertAdjacentHTML("beforeend", newGallery);
-// refs.gallery.addEventListener("click");
-refs.gallery.addEventListener("click", refs.choseImg);
+basicLightboxGallery.gallery.insertAdjacentHTML("beforeend", newGallery);
+
+basicLightboxGallery.gallery.addEventListener(
+  "click",
+  basicLightboxGallery.choseImg
+);
+// basicLightboxGallery.gallery.addEventListener("click");
